@@ -1,12 +1,70 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <meta charset="utf-8">
+
+        <title>
+            SnowTricks - {% block title %}{% endblock %}
+        </title>
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+        {% endblock %}
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
+
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div id="header" class="col-md-2">
+                        <h1>SnowTricks</h1>
+                    </div>
+                    <div id="menu" class="col-md-offset-6 col-md-4 text-right top-menu">
+                        <a href="{{ path('app_trick_list') }}">Accueil</a>
+                    </div>
+                </div>
+                <div class="row banner">
+                    <div class="col-md-offset-11 pt-1 text-center tools">
+                        {% block tools %} {% endblock %}
+                    </div>
+                    <h1>{% block banner_title %}{% endblock %}</h1>
+                    <div class="col-md-offset-11 to-content">
+                        <a href="#content"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                    </div>
+                </div>
+                <div id="content" class="container-fluid well">
+                    {% block content %}{% endblock %}
+                </div>
+                <footer>
+                    <p>Copyright ©
+                        {{ 'now'|date('Y') }}</p>
+                </footer>
+            </div>
+            <a href="#content">
+                <p class="to-top"> 
+                    <i class="glyphicon glyphicon-chevron-up"></i>
+                </p>
+            </a> 
+        {% endblock %}
         {% block javascripts %}{% endblock %}
+        <script>
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 100) {
+                    $('.to-top').fadeIn();
+                } else {
+                    $('.to-top').fadeOut();
+                }
+            });
+        </script>
     </body>
 </html>

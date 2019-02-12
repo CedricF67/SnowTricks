@@ -1,0 +1,96 @@
+hr {
+    margin: 10px;
+}
+
+.banner h1 {
+    padding-top: 100px;
+}
+
+.top-menu {
+    line-height: 69px;
+}
+
+.banner {
+    background-image: url(../img/banners/banner_001.jpg);
+    background-repeat: no-repeat;
+    background-position: top;
+    height: 450px;
+    margin-bottom: 19px;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px black;
+    position: relative;
+}
+
+.no-shaddow {
+    text-shadow: none;
+}
+
+.tools {
+    line-height: 66px;
+}
+
+.tricks {
+    height: 235px;    
+}
+
+.trick-picture {
+    height: 175px;
+}
+
+.tricks img {
+    max-width: 100%;
+    max-height: 175px;
+}
+
+.form-no-style {
+    list-style-type:none;
+    padding-inline-start: 0;
+    margin-top: -15px;
+}
+
+ul li {
+    padding-top: 15px;
+}
+
+.description {
+    margin-top: 15px;
+}
+
+.tags {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.tags > div {
+    padding: 10px;
+    margin: 0 5px;
+    background: #6692b9;
+    color: white;
+    border-radius: 5px;
+}
+
+.to-content {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    padding: 6px 7px 0 9px;
+    background-color: white;
+    border: 2px solid #337ab7;
+    border-radius: 10px;
+    text-shadow: none;
+    font-size: 24px;
+}
+
+.to-top {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    padding: 6px 7px 0 9px;
+    background-color: white;
+    border: 2px solid #337ab7;
+    border-radius: 10px;
+    display: none;
+    font-size: 24px;
+}

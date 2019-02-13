@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}
+    Accueil
+{% endblock %}
 
 {% block banner_title %}
     Snowtricks
@@ -9,8 +11,45 @@
 {% endblock %}
 
 {% block content %}
+    <div id="tricks">
+       
+    </div>
+    <div id="load_more" class="row text-center">
+        <button type="button" class="btn btn-primary" onclick="load_more()">Charger plus</button>
+    </div>
+    {% if is_granted('ROLE_USER') %}
+        <hr>
+        <div class="row text-center">
+            <a href="{{ path('app_trick_new') }}" class="btn btn-primary">Ajouter une figure</a>
+        </div>
+    {% endif %}
+{% endblock %}
 
-    <h1>Bonjour !</h1>
+{% block javascripts %}
+    <script>
+    var lastTrickId = 0;
 
-    Ceci sera la page d'accueil du site.
+    // On execute la fonction dès le chargement complet de la page
+    $(document).ready(function(){
+        load_more();
+    });
+
+    function load_more(){
+        $.ajax({
+            url: "{{ path('app_trick_loadmore') }}" + '/' + lastTrickId,
+            cache: false,
+            success: function(data){
+                $('#tricks').append(data);
+            },
+            error: function(){},
+            complete: function(){}
+        });
+        lastTrickId = lastTrickId + 5;
+
+        //Bouton masqué si il n'y a plus de figures à charger
+        if (lastTrickId >= {{ totalTricks }}) {
+            $('#load_more').hide();
+        }
+    };
+    </script>
 {% endblock %}

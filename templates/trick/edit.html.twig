@@ -1,0 +1,160 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Editer une figure
+{% endblock %}
+
+{% block banner_title %}
+    Editer une figure
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for picture in trick.pictures %}
+            <div class="col-md-2 thumbnail text-center">
+                <img src="{{ asset(trick.getPicturePath ~ picture.file) }}" width="100%"/>
+                <div class="caption">
+                    <a class="btn btn-danger" href="{{ path('app_trick_deletepicture',{'id': picture.id}) }}"><i class="glyphicon glyphicon-trash"></i></a>
+                </div>
+            </div>
+        {% endfor %}
+        {% for video in trick.videos %}
+            <div class="col-md-2 thumbnail text-center">
+                <div class="embed-responsive embed-responsive-16by9">
+                    {{ video.url|raw }}
+                </div>
+                <div class="caption">
+                    <a class="btn btn-danger" href="{{ path('app_trick_deletevideo',{'id': video.id}) }}"><i class="glyphicon glyphicon-trash"></i></a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row text-center">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PicturesModal">
+            Ajouter une image
+        </button>
+    </div>
+    <div class="row">
+        {{ form_start(form, {'attr': {'class': 'col-md-offset-2 col-md-8'}}) }}
+
+        {# Les erreurs générales du formulaire #}
+        {{ form_errors(form) }}
+
+        {# Génération du champ 'Nom' #}
+        <div class="form-group">
+            {{ form_label(form.name, "Nom :") }}
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name) }}
+        </div>
+
+        {# Génération du champ 'Description' #}
+        <div class="form-group">
+            {{ form_label(form.description, "Description :") }}
+            {{ form_errors(form.description) }}
+            {{ form_widget(form.description) }}
+        </div>
+
+        {# Génération du champ 'Groupe' #}
+        <div class="form-group">
+            {{ form_label(form.trickGroup, "Groupe :") }}
+            {{ form_errors(form.trickGroup) }}
+            {{ form_widget(form.trickGroup) }}
+        </div>
+
+        {# Génération du champ 'Vidéos' #}
+        <div class="form-group">
+            {{ form_label(form.videos, "Vidéo(s) :") }}
+            <p>Collez ici les balises embed de vos vidéos youtube.<br />Cliquez sur le bouton 'Ajouter une vidéo' pour ajouter une vidéo supplémentaire.</p>
+            {{ form_errors(form.videos) }}
+            <ul id="trickvideo-fields-list" class="form-no-style" data-prototype="<div class='col-sm-1'><button type='button' class='btn btn-danger' onclick='remove(this.parentNode)'><i class='glyphicon glyphicon-remove'></i></button></div><div class='col-sm-11'>{{ form_widget(form.videos.vars.prototype)|e }}</div>" data-widget-tags="{{ '<li></li>'|e }}">
+                {% for videoField in form.videos %}
+                    <li>
+                        {{ form_errors(videoField) }}
+                        {{ form_widget(videoField) }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="form-group">
+            <button type="button" class="add-another-collection-widget btn btn-primary" data-list="#trickvideo-fields-list">Ajouter une vidéo</button>
+        </div>
+
+    {# Boutons #}
+    <a class="btn btn-danger" href="{{ path('app_trick_delete',{'id': trick.id}) }}">Supprimer la figure</a>
+    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+    {{ form_end(form) }}
+    </div>
+
+    {# Fenêtre modale pour l'ajout d'images #}
+    <div class="modal fade" id="PicturesModal" tabindex="-1" role="dialog" aria-labelledby="PicturesModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="PicturesModalLabel">Ajouter une image</h4>
+                </div>
+                {{ form_start(formPictures) }}
+                <div class="modal-body">
+                    <p>Ajoutez une image en cliquant sur le bouton 'Choisir un fichier' çi-dessous.<br /><br />
+                    Cliquez sur le vouton '+' pour ajouter une image supplémentaire, ou sur le bouron 'X' pour la retirer.<br /><br />
+                    Vous pouvez ajouter autant d'images que vous le souhaitez.</p>
+                    {{ form_errors(formPictures) }}  
+                    <div class="form-group">
+                        {{ form_errors(formPictures.pictures) }}
+                        <ul id="trickpicture-fields-list" class="form-no-style" data-prototype="<div class='col-sm-1'><button type='button' class='btn btn-danger' onclick='remove(this.parentNode)'><i class='glyphicon glyphicon-remove'></i></button></div><div class='col-sm-11'>{{ form_widget(formPictures.pictures.vars.prototype)|e }}</div>" data-widget-tags="{{ '<li></li>'|e }}">
+                        {% for pictureField in formPictures.pictures %}
+                            <li>
+                                {{ form_errors(pictureField) }}
+                                {{ form_widget(pictureField) }}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="add-another-collection-widget btn btn-success" data-list="#trickpicture-fields-list"><i class="glyphicon glyphicon-plus"></i></button>
+                    </div>
+                </div>
+            <div class="modal-footer">
+            {{ form_widget(formPictures.save, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+        {{ form_end(formPictures) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('.add-another-collection-widget').click(function (e) {
+                e.preventDefault();
+                var list = jQuery(jQuery(this).attr('data-list'));
+               // Try to find the counter of the list
+                var counter = list.data('widget-counter') | list.children().length;
+                // If the counter does not exist, use the length of the list
+                if (!counter) {
+                    counter = list.children().length;
+                }
+               // grab the prototype template
+               var newWidget = list.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your emails
+                // end name attribute looks like name="contact[emails][2]"
+                console.log("newWidget : ", newWidget);
+                newWidget = newWidget.replace(/__name__/g, counter);
+                // Increase the counter
+                counter++;
+                // And store it, the length cannot be used if deleting widgets is allowed
+                list.data(' widget-counter', counter);
+                // create a new list element and add it to the list
+                var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+                newElem.appendTo(list);
+            }).click()
+        });
+
+        // Supprimer un media
+        function remove(element){
+            $(element).parent().remove();
+        }
+    </script>
+{% endblock %}

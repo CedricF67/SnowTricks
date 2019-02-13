@@ -2,13 +2,20 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @UniqueEntity("name")
  */
 class Trick
 {
+    const PICTURE_PATH = 'uploads/pictures/';
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -18,6 +25,7 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
      */
     private $name;
 
@@ -27,9 +35,50 @@ class Trick
     private $description;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\TrickGroup", inversedBy="trick")
+     * @ORM\JoinColumn(nullable=false)
+     * @Assert\Valid
+     */
+    private $trickGroup;
+
+    /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime
      */
     private $createdDate;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TrickVideo", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     */
+    private $videos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TrickPicture", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $pictures;
+
+    public function __construct()
+    {
+        $this->createdDate = new \Datetime();
+        $this->videos = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
+    }
+
+    public function getFirstPicture()
+    {
+        // Attribution d'une image par défaut si la figure n'a aucune immage associée
+        if ($this->pictures->count()=== 0) {
+            return $this->getPicturePath() . 'default.png';
+        }
+
+        return $this->getPicturePath() . $this->pictures->first()->getFile();
+    }
+
+    public function getPicturePath()
+    {
+        return self::PICTURE_PATH;
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +109,18 @@ class Trick
         return $this;
     }
 
+    public function getTrickGroup(): ?TrickGroup
+    {
+        return $this->trickGroup;
+    }
+
+    public function setTrickGroup(?TrickGroup $trickGroup): self
+    {
+        $this->trickGroup = $trickGroup;
+
+        return $this;
+    }
+
     public function getCreatedDate(): ?\DateTimeInterface
     {
         return $this->createdDate;
@@ -68,6 +129,70 @@ class Trick
     public function setCreatedDate(\DateTimeInterface $createdDate): self
     {
         $this->createdDate = $createdDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrickVideo[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(TrickVideo $video): self
+    {
+        if(!true === is_null($video->getUrl())) {           
+            if (!$this->videos->contains($video)) {
+                $this->videos->add($video);
+                $video->setTrick($this);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(TrickVideo $video): self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrickPicture[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(TrickPicture $picture): self
+    {  
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures->add($picture);
+            $picture->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(TrickPicture $picture): self
+    {
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+            // set the owning side to null (unless already changed)
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
+            }
+        }
 
         return $this;
     }

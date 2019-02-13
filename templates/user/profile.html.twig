@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Profil de {{ user.username }}
+{% endblock %}
+
+{% block banner_title %}
+Profil de {{ user.username }}
+{% endblock %}
+
+{% block content %}
+    <div class="row col-md-offset-1 col-md-7 text-left">
+        {{ form_start(form) }}
+
+        {# Les erreurs générales du formulaire #}
+        {{ form_errors(form) }}
+
+        {# Génération du champ 'Nom' #}
+        <div class="form-group">
+
+            {# Génération du label. #}
+            {{ form_label(form.username, "Nom :", {'label_attr': {'class': 'control-label'}}) }}
+
+            {# Affichage des erreurs pour ce champ précis #}
+            {{ form_errors(form.username) }}
+
+            {# Génération de l'input #}
+            {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        {# Génération du champ 'Mot de passe' #}
+        <div class="form-group">
+            {{ form_label(form.plainPassword.first, "Mot de passe :", {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(form.plainPassword.first) }}
+            {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.plainPassword.second, "Répéter le mot de passe :", {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(form.plainPassword.second) }}
+            {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        {# Génération du champ 'Email' #}
+        <div class="form-group">
+            {{ form_label(form.email, "Email :", {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        {# Génération du champ 'Avatar' #}
+        <div class="form-group">
+            {{ form_label(form.avatar, "Avatar :", {'label_attr': {'class': 'control-label'}}) }}
+            {{ form_errors(form.avatar) }}
+            {{ form_widget(form.avatar) }}
+        </div>
+
+        {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+        {# Génération automatique des champs pas encore écrits #}
+        {{ form_rest(form) }}
+
+        {# Fermeture de la balise <form> du formulaire HTML #}
+        {{ form_end(form) }}
+    </div>
+    <div class="col-md-3 text-right">
+        <img class="img-thumbnail" src="{{ asset('uploads/avatars/' ~ user.avatar) }}" height="200" width="200"/>
+    </div>
+{% endblock %}

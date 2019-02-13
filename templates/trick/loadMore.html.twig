@@ -1,0 +1,18 @@
+<div class="row">
+{% for trick in listTricks|slice(lastTrick, 5) %}
+    <div class="col-md-2 {{ loop.first ? 'col-md-offset-1' }} thumbnail text-center tricks">
+        <div class="trick-picture">
+        <img src="{{ asset(trick.getFirstPicture) }}"/>
+        </div>
+        <div class="caption">
+            <a href="{{ path('app_trick_view', {'id': trick.id}) }}">{{ trick.name }}</a>
+            {% if is_granted('ROLE_USER') %}
+                <a class="btn btn-primary" href="{{ path('app_trick_edit',{'id': trick.id}) }}"><i class="glyphicon glyphicon-pencil"></i></a>
+                <a class="btn btn-danger" href="{{ path('app_trick_delete',{'id': trick.id}) }}"><i class="glyphicon glyphicon-trash"></i></a>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <p>Aucune figure (pour le moment !)</p>
+{% endfor %}
+</div>

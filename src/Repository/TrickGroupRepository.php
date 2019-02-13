@@ -2,26 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Trick;
+use App\Entity\TrickGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Trick|null find($id, $lockMode = null, $lockVersion = null)
- * @method Trick|null findOneBy(array $criteria, array $orderBy = null)
- * @method Trick[]    findAll()
- * @method Trick[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TrickGroup|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TrickGroup|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TrickGroup[]    findAll()
+ * @method TrickGroup[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TrickRepository extends ServiceEntityRepository
+class TrickGroupRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Trick::class);
+        parent::__construct($registry, TrickGroup::class);
     }
 
     // /**
-    //  * @return Trick[] Returns an array of Trick objects
+    //  * @return TrickGroup[] Returns an array of TrickGroup objects
     //  */
     /*
     public function findByExampleField($value)
@@ -38,7 +37,7 @@ class TrickRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Trick
+    public function findOneBySomeField($value): ?TrickGroup
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')
@@ -48,5 +47,4 @@ class TrickRepository extends ServiceEntityRepository
         ;
     }
     */
-
 }

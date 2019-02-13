@@ -1,0 +1,104 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Ajouter une figure
+{% endblock %}
+
+{% block banner_title %}
+    Ajouter une figure
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {{ form_start(form, {'attr': {'class': 'col-md-offset-2 col-md-8', 'enctype': 'multipart/form-data'}}) }}
+
+        {# Les erreurs générales du formulaire #}
+        {{ form_errors(form) }}
+
+        <legend class="col-form-label">Figure :</legend>
+
+        {# Génération du champ 'Nom' #}
+        <div class="form-group">
+
+            {# Génération du label. #}
+            {{ form_label(form.name, "Nom :") }}
+
+            {# Génération de l'input #}
+            {{ form_widget(form.name) }}
+        </div>
+
+        {# Génération du champ 'Description' #}
+        <div class="form-group">
+            {{ form_label(form.description, "Description :") }}
+            {{ form_widget(form.description) }}
+        </div>
+
+        {# Génération du champ 'Groupe' #}
+        <div class="form-group">
+            {{ form_label(form.trickGroup, "Groupe :") }}
+            {{ form_widget(form.trickGroup) }}
+        </div>
+
+        {# Génération du champs 'Images' #}
+        <div class="form-group">
+            {{ form_label(form.pictures, "Image(s) :") }}
+
+            <ul id="trickpicture-fields-list" class="form-no-style" data-prototype="<div class='col-sm-1'><button type='button' class='btn btn-danger' onclick='remove(this.parentNode)'><i class='glyphicon glyphicon-remove'></i></button></div><div class='col-sm-11'>{{ form_widget(form.pictures.vars.prototype)|e }}</div>" data-widget-tags="{{ '<li></li>'|e }}"></ul>
+        </div>
+        <div class="form-group">
+            <button type="button" class="add-another-collection-widget btn btn-primary" data-list="#trickpicture-fields-list">Ajouter une image</button>
+        </div>
+
+        {# Génération du champ 'Vidéos' #}
+        <div class="form-group">
+            {{ form_label(form.videos, "Vidéo(s) :") }}
+            <p>Collez ici les balises embed de vos vidéos youtube.<br />Cliquez sur le bouton 'Ajouter une vidéo' pour ajouter une vidéo supplémentaire.</p>
+            <ul id="trickvideo-fields-list" class="form-no-style" data-prototype="<div class='col-sm-1'><button type='button' class='btn btn-danger' onclick='remove(this.parentNode)'><i class='glyphicon glyphicon-remove'></i></button></div><div class='col-sm-11'>{{ form_widget(form.videos.vars.prototype)|e }}</div>" data-widget-tags="{{ '<li></li>'|e }}"></ul>
+        </div>
+        <div class="form-group">
+            <button type="button" class="add-another-collection-widget btn btn-primary" data-list="#trickvideo-fields-list">Ajouter une vidéo</button>
+        </div>
+
+    {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+    {# Fermeture de la balise <form> du formulaire HTML #}
+    {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            jQuery('.add-another-collection-widget').click(function (e) {
+                e.preventDefault();
+                var list = jQuery(jQuery(this).attr('data-list'));
+               // Try to find the counter of the list
+                var counter = list.data('widget-counter') | list.children().length;
+                // If the counter does not exist, use the length of the list
+                if (!counter) {
+                    counter = list.children().length;
+                }
+               // grab the prototype template
+               var newWidget = list.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your emails
+                // end name attribute looks like name="contact[emails][2]"
+                console.log("newWidget : ", newWidget);
+                newWidget = newWidget.replace(/__name__/g, counter);
+                // Increase the counter
+                counter++;
+                // And store it, the length cannot be used if deleting widgets is allowed
+                list.data(' widget-counter', counter);
+                // create a new list element and add it to the list
+                var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+                newElem.appendTo(list);
+            })
+        });
+
+        // Supprimer un media
+        function remove(element){
+            $(element).parent().remove();
+        }
+    </script>
+{% endblock %}

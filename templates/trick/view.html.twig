@@ -1,0 +1,47 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ trick.name }}
+{% endblock %}
+
+{% block banner_title %}
+    {{ trick.name }}
+{% endblock %}
+
+{% block tools %}
+    {% if is_granted('ROLE_USER') %}
+        <a class="btn btn-default no-shaddow" href="{{ path('app_trick_edit',{'id': trick.id}) }}"><i class="glyphicon glyphicon-pencil"></i></a>
+        <a class="btn btn-default no-shaddow" href="{{ path('app_trick_delete',{'id': trick.id}) }}"><i class="glyphicon glyphicon-trash"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for picture in trick.pictures %}
+            <div class="col-md-2 thumbnail">
+                <img src="{{ asset(trick.getPicturePath ~ picture.file) }}" width="100%"/>
+            </div>
+        {% endfor %}
+        {% for video in trick.videos %}
+        <div class="col-md-2 thumbnail">
+           <div class="embed-responsive embed-responsive-16by9">
+                {{ video.url|raw }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if trick.description %}
+    <div class="row description col-md-offset-2 col-md-8">
+        <h3>Description :</h3>
+        {{ trick.description }}
+    </div>
+    {% endif %}
+    <div class="row tags text-center col-md-offset-3 col-md-6">
+        <div>
+            Groupe : {{ trick.trickGroup.name }}
+        </div>
+        <div>
+            Date de création: {{ trick.createdDate|date("d/m/Y") }}
+        </div>
+    </div>
+{% endblock %}

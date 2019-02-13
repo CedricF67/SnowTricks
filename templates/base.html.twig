@@ -31,6 +31,13 @@
                     </div>
                     <div id="menu" class="col-md-offset-6 col-md-4 text-right top-menu">
                         <a href="{{ path('app_trick_list') }}">Accueil</a>
+                        {% if is_granted('ROLE_USER') %}
+                            - Connecté en tant que <a href="{{ path('app_user_profile', { 'id': app.user.id }) }}">{{ app.user.username }}</a>
+                            - <a href="{{ path('app_security_logout') }}">Déconnexion</a>
+                        {% else %}
+                            - <a href="{{ path('app_login') }}">Connexion</a>
+                            - <a href="{{ path('app_user_register') }}">S'enregistrer</a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row banner">

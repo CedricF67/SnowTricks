@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Entity\TrickPicture;
 use App\Entity\TrickVideo;
+use App\Entity\Comment;
 use App\Form\EditTrickType;
 use App\Form\TrickPicturesType;
 use App\Form\TrickType;
@@ -77,9 +78,14 @@ class TrickController extends AbstractController
      * @Route("/trick/view/{id}")
      */
     public function view(Trick $trick)
-    {        
+    {
+        // Calcul du nombre total de commentaires correspondant à la figure dans la base de données
+        $totalComments = $this->getDoctrine()
+        ->getRepository(Comment::class)
+        ->count(['trick' => $trick]);
+        
         // Appel du template
-        return $this->render('trick/view.html.twig', ['trick' => $trick]);
+        return $this->render('trick/view.html.twig', ['trick' => $trick, 'totalComments' => $totalComments]);
     }
 
     // Edition d'une figure

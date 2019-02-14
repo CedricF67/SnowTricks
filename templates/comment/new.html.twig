@@ -1,0 +1,22 @@
+<div class="row">
+    {{ form_start(form, {'attr': {'class': 'col-md-12'}, 'action': path('app_comment_new', { 'trickId' : comment.trick.id } ) }) }}
+
+    {# Les erreurs générales du formulaire #}
+    {{ form_errors(form) }}
+
+    {# Génération du champ 'Commentaire' #}
+    <div class="form-group">
+        {{ form_label(form.comment, "Commentaire :", {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_errors(form.comment) }}
+        {{ form_widget(form.comment, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+    {# Génération automatique des champs pas encore écrits #}
+    {{ form_rest(form) }}
+
+    {# Fermeture de la balise <form> du formulaire HTML #}
+    {{ form_end(form) }}
+</div>

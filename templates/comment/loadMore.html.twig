@@ -1,0 +1,13 @@
+{% for comment in listComments|slice(lastComment, 5) %}
+    <div class="media panel">
+        <div class="media-left">
+            <img src="{{ asset('uploads/avatars/' ~ comment.user.avatar) }}" height="50" width="50"/>
+        </div>
+        <div class="media-body">
+            Commentaire de {{ comment.user.username }}, le {{ comment.createdDate|date("d/m/Y") }} à {{ comment.createdDate|date("H:i:s") }}</br>
+            {{ comment.comment }}
+        </div>
+    </div>
+{% else %}
+    <p>Aucun commentaire pour cette figure. Soyez le premier à laisser un commentaire !</p>
+{% endfor %}

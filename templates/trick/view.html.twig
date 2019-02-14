@@ -44,4 +44,46 @@
             Date de création: {{ trick.createdDate|date("d/m/Y") }}
         </div>
     </div>
+    {% if is_granted('ROLE_USER') %}
+    <div class="row col-md-offset-2 col-md-8">
+        <h3>Poster un commentaire</h3>
+        {{ render(controller('App\\Controller\\CommentController::new', { 'trickId' : trick.id, 'userId' : app.user.id })) }}
+    </div>
+    {% endif %}
+    <div id="comments" class="row col-md-offset-2 col-md-8">
+        <h3>Commentaires :</h3>
+
+    </div>
+    <div id="load_more" class="row col-md-12 text-center">
+        <button type="button" class="btn btn-primary" onclick="load_more()">Charger plus</button>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+    var lastCommentId = 0;
+
+    // On execute la fonction dès le chargement complet de la page
+    $(document).ready(function(){
+        load_more();
+    });
+
+    function load_more(){
+        $.ajax({
+            url: "{{ path('app_comment_loadmore') }}" + '/' + {{ trick.id }} + '-' + lastCommentId,
+            cache: false,
+            success: function(data){
+                $('#comments').append(data);
+            },
+            error: function(){},
+            complete: function(){}
+        });
+        lastCommentId = lastCommentId + 5;
+
+        //Bouton masqué si il n'y a plus de commentaires à charger
+        if (lastCommentId >= {{ totalComments }}) {
+            $('#load_more').hide();
+        }
+    };
+    </script>
 {% endblock %}

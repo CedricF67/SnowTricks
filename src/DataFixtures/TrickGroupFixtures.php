@@ -27,6 +27,7 @@ class TrickGroupFixtures extends Fixture
             $group->setName($name);
             // On le persiste
             $manager->persist($group);
+            $this->addReference('Group-' . $name, $group);
         }
         // On déclenche l'enregistrement de tous les groupes
         $manager->flush();

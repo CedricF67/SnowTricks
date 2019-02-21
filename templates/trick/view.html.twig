@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
+    <div id="medias" class="row">
         {% for picture in trick.pictures %}
             <div class="col-md-2 thumbnail">
                 <img src="{{ asset(trick.getPicturePath ~ picture.file) }}" width="100%"/>
@@ -29,6 +29,12 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+    <div id="DisplayMedias" class="row text-center">
+        <button type="button" class="btn btn-primary" onclick="display_medias()">Afficher les médias</button>
+    </div>
+    <div id="HideMedias" class="row text-center">
+        <button type="button" class="btn btn-primary" onclick="hide_medias()">Masquer les médias</button>
     </div>
     {% if trick.description %}
     <div class="row description col-md-offset-2 col-md-8">
@@ -85,5 +91,18 @@
             $('#load_more').hide();
         }
     };
+
+    // Fonctions pour afficher ou masquer les médias sur mobile
+    function display_medias(){
+        $("#medias").show();
+        $("#HideMedias").show();
+        $("#DisplayMedias").hide();
+    }
+
+    function hide_medias(){
+        $("#medias").hide();
+        $("#HideMedias").hide();
+        $("#DisplayMedias").show();
+    }
     </script>
 {% endblock %}

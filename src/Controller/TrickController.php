@@ -62,7 +62,7 @@ class TrickController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
-            $this->addFlash('success', 'La figure à bien étée enregistrée.');
+            $this->addFlash('success', 'La figure à bien été enregistrée.');
 
             // Redirection vers la liste des figures une fois la figure ajoutée
             return $this->redirectToRoute('app_trick_list');

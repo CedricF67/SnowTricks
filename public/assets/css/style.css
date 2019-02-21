@@ -71,6 +71,13 @@ ul li {
     border-radius: 5px;
 }
 
+.flash {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 20px;
+    z-index: 1;
+}
+
 .to-content {
     position: absolute;
     bottom: 15px;
@@ -93,4 +100,22 @@ ul li {
     border-radius: 10px;
     display: none;
     font-size: 24px;
+}
+
+#DisplayMedias, #HideMedias {
+    display: none;
+}
+
+@media screen and (max-device-width: 480px) {
+    #medias {
+        display: none;
+    }
+
+    #DisplayMedias {
+        display: block;
+    }
+
+    #HideMedias {
+        display: none;
+    }
 }

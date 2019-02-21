@@ -8,8 +8,28 @@
             <a href="{{ path('app_trick_view', {'id': trick.id}) }}">{{ trick.name }}</a>
             {% if is_granted('ROLE_USER') %}
                 <a class="btn btn-primary" href="{{ path('app_trick_edit',{'id': trick.id}) }}"><i class="glyphicon glyphicon-pencil"></i></a>
-                <a class="btn btn-danger" href="{{ path('app_trick_delete',{'id': trick.id}) }}"><i class="glyphicon glyphicon-trash"></i></a>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DeleteModal">
+                <i class="glyphicon glyphicon-trash"></i>
+                </button>
             {% endif %}
+        </div>
+    </div>
+
+    {# Fenêtre modale pour la suppression de figures #}
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="DeleteModalLabel">Supprimer la figure</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Etes-vous sûr de vouloir supprimer cette figure ?</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" href="{{ path('app_trick_delete',{'id': trick.id}) }}">Oui</a>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Non</span></button>
+                </div>
+            </div>
         </div>
     </div>
 {% else %}

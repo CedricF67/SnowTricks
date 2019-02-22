@@ -187,10 +187,12 @@ class User implements UserInterface
 
     public function setAvatar($avatar = null): self
     {
-        if (false === is_null($avatar)) {
-            $this->avatar = $avatar;
+        if (null === $avatar) {
+            return $this;
         }
         
+        $this->avatar = $avatar;
+
         return $this;
     }
 

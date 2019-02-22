@@ -36,7 +36,7 @@ class SecurityController extends AbstractController
     /**
      * @Route ("/forgottenPassword", name="app_security_forgottenPassword")
      */
-    public function forgottenPassword(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer, TokenGeneratorInterface $tokenGenerator): Response
+    public function forgottenPassword(Request $request, \Swift_Mailer $mailer, TokenGeneratorInterface $tokenGenerator): Response
     {
         // Si l'utilisateur à soumis le formulaire pour reset son mot de passe
         if ($request->isMethod('POST')) {
@@ -105,39 +105,35 @@ class SecurityController extends AbstractController
      */
     public function resetPassword(Request $request, string $token, UserPasswordEncoderInterface $passwordEncoder)
     {
-        // Si l'utilisateur a soumis le formulaire avec son token de reset de mot de passe
-        if ($request->isMethod('POST')) {
-
-            // Stockage de l'appel du manager de doctrine
-            $entityManager = $this->getDoctrine()->getManager();
- 
-            // Récupération de l'utilisateur correspondant au token
-            $user = $entityManager->getRepository(User::class)->findOneByResetToken($token);
- 
-            // Si le token n'existe pas, une erreur est retournée
-            if ($user === null) {
-                $this->addFlash('danger', 'Token Inconnu');
-
-                // Redirection vers la liste des figures
-                return $this->redirectToRoute('app_trick_list');
-            }
- 
-            // Suppression du token assigné à l'utilisateur
-            $user->setResetToken(null);
-
-            // Changement du mot de passe de l'utilisateur
-            $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
-            $entityManager->flush();
- 
-            $this->addFlash('notice', 'Mot de passe mis à jour');
- 
-            // Redirection vers la liste des figures
-            return $this->redirectToRoute('app_trick_list');
-        }else {
+        // Si l'utilisateur n'a pas soumis le formulaire avec son token de reset de mot de passe
+        if (false === $request->isMethod('POST')) {
             
             // Génération du template
             return $this->render('security/resetPassword.html.twig', ['token' => $token]);
         }
- 
+
+        // Stockage de l'appel du manager de doctrine
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // Récupération de l'utilisateur correspondant au token
+        // Si le token n'existe pas, une erreur est retournée
+        if (null === $user = $entityManager->getRepository(User::class)->findOneByResetToken($token)) {
+            $this->addFlash('danger', 'Token Inconnu');
+
+            // Redirection vers la liste des figures
+            return $this->redirectToRoute('app_trick_list');
+        }
+
+        // Suppression du token assigné à l'utilisateur
+        $user->setResetToken(null);
+
+        // Changement du mot de passe de l'utilisateur
+        $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
+        $entityManager->flush();
+
+        $this->addFlash('notice', 'Mot de passe mis à jour');
+
+        // Redirection vers la liste des figures
+        return $this->redirectToRoute('app_trick_list');
     }
 }

@@ -80,7 +80,7 @@
         </div>
 
     {# Boutons #}
-    <a class="btn btn-danger" href="{{ path('app_trick_delete',{'id': trick.id}) }}">Supprimer la figure</a>
+    <a class="btn btn-danger" href="{{ path('app_trick_delete',{'id': trick.id}) }}" onclick="confirm('Etes-vous sur de vouloir supprimer cette figure ?')">Supprimer la figure</a>
     {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
     {{ form_end(form) }}
     </div>

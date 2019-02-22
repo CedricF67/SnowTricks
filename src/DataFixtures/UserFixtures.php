@@ -32,7 +32,7 @@ class UserFixtures extends Fixture
             $user->setUsername($name);
             $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
             $user->setEmail($name . '@test.com');
-            $user->setCreatedDate(\DateTime::createFromFormat('d/m/Y', '06/12/2018'));
+            $user->setCreatedDate(new \DateTime('2018-12-06'));
             $user->setAvatar('default.png');
             $user->setRoles(['ROLE_USER']);
             // On le persiste

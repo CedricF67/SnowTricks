@@ -1,4 +1,7 @@
 # SnowTricks
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/55430ebdfff4439085990ff86deae032)](https://app.codacy.com/app/CedricF67/SnowTricks?utm_source=github.com&utm_medium=referral&utm_content=CedricF67/SnowTricks&utm_campaign=Badge_Grade_Dashboard)
+
 A website for snowboard  tricks
 
 ## How to install

@@ -38,6 +38,8 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Utilisateur enregistré.');
+
             //Redirection vers la liste des figures
             return $this->redirectToRoute('app_trick_list');
         }
@@ -69,6 +71,8 @@ class UserController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Le profil à bien été mis à jour.');
         }
 
         // Appel du template

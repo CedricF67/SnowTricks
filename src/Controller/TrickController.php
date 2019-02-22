@@ -112,6 +112,8 @@ class TrickController extends AbstractController
             }
             $entityManager->flush();
 
+            $this->addFlash('success', 'La figure à bien été éditée.');
+
             // Redirection vers la page de visualisation de la figure qui viens d'être éditée
             return $this->redirectToRoute('app_trick_view', ['id' => $trick->getId()]);
         }
@@ -149,6 +151,8 @@ class TrickController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($trick);
         $entityManager->flush();
+
+        $this->addFlash('success', 'La figure à bien été supprimée.');
 
         // Redirection vers la liste des figures une fois la figure supprimée
         return $this->redirectToRoute('app_trick_list');

@@ -88,7 +88,7 @@ class SecurityController extends AbstractController
             // Envoi du message
             $mailer->send($message);
  
-            $this->addFlash('notice', 'Mail envoyé');
+            $this->addFlash('success', 'Mail envoyé');
  
             // Redirection vers la liste des figures
             return $this->redirectToRoute('app_trick_list');
